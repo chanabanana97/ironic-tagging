@@ -2,7 +2,8 @@
 const DButils = require("./routes/utils/DButils");
 const axios = require("axios");
 const bcrypt = require("bcryptjs");
-require("dotenv").config();
+// require("dotenv").config();
+require("dotenv").config({path: 'project/.env'})
 //#endregion
 //#region express configures
 var express = require("express");
