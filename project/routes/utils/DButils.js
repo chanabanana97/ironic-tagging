@@ -1,25 +1,45 @@
-require("dotenv").config();
-const sql = require("mssql");
+require("dotenv").config({path: 'project/.env'})
+// require("dotenv").config()
+
+const {Pool} = require("pg");
 
 const config = {
-  user: process.env.tedious_userName,
-  password: process.env.tedious_password,
-  server: process.env.tedious_server,
+  user: process.env.tedious_username,
+  host: process.env.tedious_server,
   database: process.env.tedious_database,
-  options: {
-    encrypt: true,
-    enableArithAbort: true
-  }
+  password: process.env.tedious_password,
+  port: process.env.PORT,
 };
 
-const pool = new sql.ConnectionPool(config);
+// const config = {
+//   user: "irony",
+//   host: "132.72.116.72",
+//   database:"irony",
+//   password: "ise2021ironic",
+//   port: "8190",
+// };
+
+// const sql = require("mssql");
+
+// const config = {
+//   user: process.env.tedious_userName,
+//   password: process.env.tedious_password,
+//   server: process.env.tedious_server,
+//   database: process.env.tedious_database,
+//   options: {
+//     encrypt: true,
+//     enableArithAbort: true
+//   }
+// };
+
+const pool = new Pool(config);
 const poolConnect = pool.connect();
 
 exports.execQuery = async function (query) {
   await poolConnect;
   try {
-    var result = await pool.request().query(query);
-    return result.recordset;
+    var result = await pool.query(query);
+    return result.rows;
   } catch (err) {
     console.error("SQL error", err);
     throw err;
