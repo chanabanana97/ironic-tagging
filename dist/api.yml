@@ -4,7 +4,9 @@ info:
   description: API for  project
   version: 1.0.0
 tags:
+  - name: Users
   - name: Auth
+  - name: Politicians
 
 paths:
   /Register:
@@ -42,12 +44,6 @@ paths:
             User was found in the DB and authenitcated successfully.
             The session ID is returned in a cookie named `session`. 
             You should include this cookie in subsequent requests
-          # headers:
-          #   Set-Cookie:
-          #     schema:
-          #       type: string
-          #       example: session=87s97sdhgf279293f8w0e9
-            # Note that the Set-Cookie header and securitySchemes are not connected in any way, and the Set-Header definition is for documentation purposes only.
         "401":
           description: Authentication failed
   /logout:
@@ -58,17 +54,44 @@ paths:
       responses:
         "200":
           description: "the user has ben successfully logged out"
+          
+
+  /Politicians/getPolitician/{politicianName}:
+    get:
+      summary: Return the politician that selected
+      description: useful for politician page
+      tags:
+        - Politicians
+      parameters:
+        - in: path
+          name: politicianName
+          description: Bibi
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: data about the politician
+          # content:
+          #   application/json:
+              # schema:
+              #   $ref: "#/components/schemas/PlayerFullDetails"
+        "404":
+          description: playerID does not exists
+
 components:
   schemas:
     User:
       type: object
       properties:
-        username:
-          maxLength: 8
-          minLength: 3
+        firstname:
           type: string
-          description: username conatins between 3 to 8 letters only
-          example: ladygaga
+          description: user's first name
+          example: Stefani
+        lastname:
+          type: string
+          description: user's last name
+          example: Germanotta
         password:
           maxLength: 10
           minLength: 5
@@ -78,6 +101,13 @@ components:
             is a number and a special char
           format: password
           example: lady@56
+        email:
+          pattern: email
+          type: string
+          description: user's email
+          example: ladygaga@gmail.com
+
+
     LoginScheme:
       type: object
       properties:
@@ -86,12 +116,12 @@ components:
           minLength: 3
           maxLength: 8
           description: username conatins letters only
-          example: naorbe
+          example: ladygaga
         password:
           type: string
           minLength: 5
           maxLength: 10
           format: password
           description: password conatins at least one number and one special char
-          example: naor@55
+          example: lady@56
 
