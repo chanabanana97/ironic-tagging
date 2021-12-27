@@ -50,9 +50,7 @@ app.options("*", cors(corsConfig));
 const port = "3000";
 
 const auth = require("./routes/auth");
-// const users = require("./routes/users");
-// const league = require("./routes/league");
-// const teams = require("./routes/teams");
+const posts = require("./routes/posts");
 
 //#endregion
 
@@ -78,9 +76,7 @@ app.get("/alive", (req, res) => res.send("I'm alive"));
 
 // Routings
 
-// app.use("/users", users);
-// app.use("/league", league);
-// app.use("/teams", teams);
+app.use("/posts", posts);
 app.use(auth);
 
 app.use(function (err, req, res, next) {

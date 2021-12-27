@@ -19,19 +19,6 @@ const config = {
 //   port: "8190",
 // };
 
-// const sql = require("mssql");
-
-// const config = {
-//   user: process.env.tedious_userName,
-//   password: process.env.tedious_password,
-//   server: process.env.tedious_server,
-//   database: process.env.tedious_database,
-//   options: {
-//     encrypt: true,
-//     enableArithAbort: true
-//   }
-// };
-
 const pool = new Pool(config);
 const poolConnect = pool.connect();
 

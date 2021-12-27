@@ -5,6 +5,7 @@ info:
   version: 1.0.0
 tags:
   - name: Auth
+  - name: Posts
 
 paths:
   /Register:
@@ -50,6 +51,94 @@ paths:
             # Note that the Set-Cookie header and securitySchemes are not connected in any way, and the Set-Header definition is for documentation purposes only.
         "401":
           description: Authentication failed
+  /posts/getPostsOfPolitician/{politicianName}:
+    get:
+      tags:
+        - Posts
+      description: get post ids of politician
+      parameters:
+        - in: path
+          name: politicianName
+          required: true
+          schema:
+            type: string
+            example: Naftali Bennett
+      responses:
+        "200":
+          description: list of ids of posts by politician 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: ["396697410351933_2870993109589005"]
+  /posts/getPostFromId/{postId}:
+    get:
+      tags:
+        - Posts
+      description: get post text from post id
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+            example: "396697410351933_2870993109589005"
+      responses:
+        "200":
+          description: message of the post
+          content:
+            application/json:
+              schema:
+                type: string
+                example: ביבי המלך!
+  /posts/labelPost:
+    post:
+      tags:
+        - Posts
+      description: label a post according to criteria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LabelPost"
+      responses:
+        "200":
+          description: "post label added successfully"
+  /posts/getPostsFromCategory:
+    get:
+      tags:
+        - Posts
+      description: get posts from a category with a certain label. for example, from the subject category with the label political
+      parameters:
+        - in: query
+          name: category
+          required: true
+          content:
+            application/json:
+              schema:
+                type: string
+                example: subject
+
+        - in: query
+          name: label
+          required: true
+          content:
+            application/json:
+              schema:
+                type: string
+                example: אישי
+
+      responses:
+        "200":
+          description: all posts that are labeled 'label' in the column 'category' returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        
+
   /logout:
     post:
       tags:
@@ -57,41 +146,69 @@ paths:
       summary: logout a user from the system and delete his cookie
       responses:
         "200":
-          description: "the user has ben successfully logged out"
+          description: "the user has been successfully logged out"
 components:
   schemas:
     User:
       type: object
       properties:
         username:
-          maxLength: 8
-          minLength: 3
           type: string
-          description: username conatins between 3 to 8 letters only
-          example: ladygaga
+          example: chana
         password:
-          maxLength: 10
-          minLength: 5
           type: string
-          description:
-            password conatins between 5 to 10 chars, at least one of them
-            is a number and a special char
           format: password
-          example: lady@56
+          example: banana
+        # isExpert:
+        #   type: Boolean
+        #   example: true
     LoginScheme:
       type: object
       properties:
         username:
           type: string
-          minLength: 3
-          maxLength: 8
-          description: username conatins letters only
-          example: naorbe
+          example: chana
         password:
           type: string
-          minLength: 5
-          maxLength: 10
           format: password
-          description: password conatins at least one number and one special char
-          example: naor@55
+          example: banana
+    LabelPost:
+      type: object
+      properties:
+        postId:
+          type: string
+          example: "396697410351933_2870993109589005"
+        username:
+          type: string
+          example: chana
+        subject:
+          type: array
+          example: [אישי,פוליטי]
+        style:
+          type: array
+          example: [רשמיות]
+        emotion:
+          type: array
+          example: [האדרה עצמית]
+        freeText:
+          type: string
+          example: הערות...
+    Post:
+      type: object
+      properties:
+        postId:
+          type: string
+          example: "396697410351933_2870993109589005"
+        politicianName:
+          type: string
+          example: Naftali Benett
+        message:
+          type: string
+          example:  בני גנץ ובוגי יעלון וסיעת ״כחול לבן״ זימנו דיון מיוחד בכנסת כדי לתקוף אותי כשר הביטחון ואת רה״מ.
+          
+
+          
+
+
+    
 
