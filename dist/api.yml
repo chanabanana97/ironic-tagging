@@ -4,8 +4,10 @@ info:
   description: API for  project
   version: 1.0.0
 tags:
+  - name: Users
   - name: Auth
   - name: Posts
+  - name: Politicians
 
 paths:
   /Register:
@@ -43,12 +45,6 @@ paths:
             User was found in the DB and authenitcated successfully.
             The session ID is returned in a cookie named `session`. 
             You should include this cookie in subsequent requests
-          # headers:
-          #   Set-Cookie:
-          #     schema:
-          #       type: string
-          #       example: session=87s97sdhgf279293f8w0e9
-            # Note that the Set-Cookie header and securitySchemes are not connected in any way, and the Set-Header definition is for documentation purposes only.
         "401":
           description: Authentication failed
   /posts/getPostsOfPolitician/{politicianName}:
@@ -146,7 +142,31 @@ paths:
       summary: logout a user from the system and delete his cookie
       responses:
         "200":
-          description: "the user has been successfully logged out"
+          description: "the user has been successfully logged out"          
+
+  /Politicians/getPolitician/{politicianName}:
+    get:
+      summary: Return the politician that selected
+      description: useful for politician page
+      tags:
+        - Politicians
+      parameters:
+        - in: path
+          name: politicianName
+          description: Bibi
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: data about the politician
+          # content:
+          #   application/json:
+              # schema:
+              #   $ref: "#/components/schemas/PlayerFullDetails"
+        "404":
+          description: playerID does not exists
+
 components:
   schemas:
     User:
