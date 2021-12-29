@@ -3,7 +3,7 @@ const DButils = require("./DButils");
 async function getPostIdsFromPolitician(politicianName) {
     try{
     const postIds = await DButils.execQuery(
-        `SELECT post_id FROM posts where politician_name= '${politicianName}'`
+        `SELECT post_id, created_time FROM posts where politician_name= '${politicianName}'`
       );
     return postIds;
     }

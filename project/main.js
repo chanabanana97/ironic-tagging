@@ -51,6 +51,8 @@ const port = "3000";
 
 const auth = require("./routes/auth");
 const posts = require("./routes/posts");
+const comments = require("./routes/comments");
+
 
 //#endregion
 
@@ -77,6 +79,8 @@ app.get("/alive", (req, res) => res.send("I'm alive"));
 // Routings
 
 app.use("/posts", posts);
+app.use("/comments", comments);
+
 app.use(auth);
 
 app.use(function (err, req, res, next) {
