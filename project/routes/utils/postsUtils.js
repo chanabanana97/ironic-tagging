@@ -1,3 +1,4 @@
+const { type } = require("express/lib/response");
 const DButils = require("./DButils");
 
 async function getPostIdsFromPolitician(politicianName) {
@@ -41,7 +42,10 @@ catch (err) {
 }}
 
 function arrFormat(arr){
-  return arr.map(str => `'${str}'`).join(',');
+  if (typeof(arr) == 'string')
+    return `'${arr}'`;
+  else
+    return arr.map(str => `'${str}'`).join(',');
 }
 
 
