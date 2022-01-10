@@ -166,6 +166,7 @@ paths:
               #   $ref: "#/components/schemas/PlayerFullDetails"
         "404":
           description: playerID does not exists
+    
 
 components:
   schemas:
