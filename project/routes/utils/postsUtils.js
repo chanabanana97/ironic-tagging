@@ -4,7 +4,7 @@ const DButils = require("./DButils");
 async function getPostIdsFromPolitician(politicianName) {
     try{
     const postIds = await DButils.execQuery(
-        `SELECT post_id, created_time FROM posts where politician_name= '${politicianName}'`
+        `SELECT post_id, created_time FROM posts where politician_name= '${politicianName}' ORDER BY created_time`
       );
     return postIds;
     }
@@ -32,8 +32,8 @@ catch (err) {
 async function labelPost(postId, username, subject, style, emotion, freeText) {
   try{  
   await DButils.execQuery(
-      `INSERT INTO labeledPosts VALUES ('${postId}', '${username}', array[${arrFormat(subject)}], 
-      array[${arrFormat(style)}], array[${arrFormat(emotion)}], '${freeText}')`
+      `INSERT INTO labeledPosts VALUES ('${postId}', '${username}', ${DButils.arrFormat(subject)}, 
+     ${DButils.arrFormat(style)}, ${DButils.arrFormat(emotion)}, '${freeText}')`
     );
   }
 catch (err) {
@@ -41,12 +41,6 @@ catch (err) {
   throw err;
 }}
 
-function arrFormat(arr){
-  if (typeof(arr) == 'string')
-    return `'${arr}'`;
-  else
-    return arr.map(str => `'${str}'`).join(',');
-}
 
 
 async function getPostIdsByCategory(category, label) { 

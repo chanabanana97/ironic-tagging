@@ -12,6 +12,15 @@ const session = require("client-sessions");
 var logger = require("morgan");
 var cors = require("cors");
 
+
+const https = require('https');
+const fs = require('fs');
+
+const options = {
+	key: fs.readFileSync('irony_cs_bgu_ac_il.key'), //('server.key'),
+	cert: fs.readFileSync('irony_cs_bgu_ac_il.pem') //('server.cert')
+};
+
 var app = express();
 app.use(logger("dev")); //logger
 app.use(express.json()); // parse application/json
@@ -19,7 +28,7 @@ app.use(
   session({
     cookieName: "session", // the cookie key name
     secret: process.env.COOKIE_SECRET, // the encryption key
-    duration: 24 * 60 * 60 * 1000, // expired after 20 sec
+    duration: 24 * 60 * 60 * 1000, // expired after 20 sec     24 * 60 * 60 * 1000 // 120 * 60 * 1000
     activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration,
     cookie: {
       httpOnly: false,
@@ -47,7 +56,8 @@ app.use(cors(corsConfig));
 app.options("*", cors(corsConfig));
 
 // const port = process.env.PORT || "3000";
-const port = "3000";
+const port = "443";
+const host = "132.72.116.78";
 
 const auth = require("./routes/auth");
 const posts = require("./routes/posts");
@@ -74,6 +84,11 @@ app.use(function (req, res, next) {
 });
 //#endregion
 
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   next();
+// });
+
 // ----> For cheking that our server is alive
 app.get("/alive", (req, res) => res.send("I'm alive"));
 
@@ -81,7 +96,7 @@ app.get("/alive", (req, res) => res.send("I'm alive"));
 
 app.use("/posts", posts);
 app.use("/comments", comments);
-app.use("/expressions", expressions);
+app.use("/expressions", expressions)
 
 app.use(auth);
 
@@ -90,12 +105,16 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500).send(err.message);
 });
 
-const server = app.listen(port, () => {
-  console.log(`Server listen on port ${port}`);
-});
-
-// process.on("SIGINT", function () {
-//   if (server) {
-//     server.close(() => console.log("server closed"));
-//   }
+// app.get("/", (req, res) => {
+//   res.sendFile(__dirname + "/index.html");
 // });
+
+// const server = app.listen(port, () => {
+//   console.log(`Server listen on port ${port}`);
+// });
+
+
+const server = https.createServer(options, app);
+server.listen(port, host, () => {
+  console.log("Server is running on https://%s:%s", host, port);
+});

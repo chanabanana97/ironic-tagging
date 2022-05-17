@@ -21,9 +21,8 @@ router.get("/getPostsOfPolitician/:politicianName", async (req, res, next) => {
   });
 
   router.post("/labelPost", async (req, res, next) => {
-    console.log(req.body.subject);
     try {
-       await postsUtils.labelPost(req.body.postId, req.session.username, req.body.subject, req.body.style, 
+       await postsUtils.labelPost(req.body.postId, req.body.username, req.body.subject, req.body.style, 
         req.body.emotion, req.body.freeText);
         res.status(200).send();
     } catch (error) {

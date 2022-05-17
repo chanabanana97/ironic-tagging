@@ -11,13 +11,6 @@ const config = {
   port: process.env.PORT,
 };
 
-// const config = {
-//   user: "irony",
-//   host: "132.72.116.72",
-//   database:"irony",
-//   password: "ise2021ironic",
-//   port: "8190",
-// };
 
 const pool = new Pool(config);
 const poolConnect = pool.connect();
@@ -33,6 +26,18 @@ exports.execQuery = async function (query) {
   }
 };
 
+
+exports.arrFormat = function(arr){
+{
+    if (arr == '') // no input
+      return null;
+    if (typeof(arr) == 'string')
+      return `array['${arr}']`;
+    else
+      arrStr = arr.map(str => `'${str}'`).join(',');
+      return `array[${arrStr}]`
+  }
+}
 // process.on("SIGINT", function () {
 //   if (pool) {
 //     pool.close(() => console.log("connection pool closed"));
